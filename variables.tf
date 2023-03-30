@@ -66,7 +66,7 @@ variable "sku" {
 variable "version" {
   type        = string
   description = "Specifies the Operating System on the OS Disk. Possible values are Linux and Windows."
-  default = "Windows"
+
 }
 
 # azurerm_network_interface
