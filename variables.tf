@@ -30,7 +30,11 @@ variable "admin_password" {
   type        = string
   description = "The password associated with the local administrator account."
 }
-
+variable "license_type" {
+  type        = string
+  description = "The pass"
+  
+}
 # os_disk
 variable "storage_account_type" {
   type        = string
@@ -69,6 +73,7 @@ variable "version" {
 
 }
 
+
 # azurerm_network_interface
 variable "ip_name" {
   type        = string
@@ -86,7 +91,7 @@ variable "private_ip_address_allocation" {
   description = "The allocation method used for the Private IP Address. Possible values are Dynamic and Static"
   default = "Dynamic"
 }
-
+# azurerm_network_security_rule
 variable "nsg_rules" {
   type = map(object({
     name                       = string
@@ -113,7 +118,7 @@ variable "nsg_rules" {
     }
   }
 }
-
+# azurerm_recovery_services_vault
 variable "recovery_services_vault_name" {
   type        = string
   description = "name of the azurerm_network_security_group"
@@ -122,9 +127,3 @@ variable "services_vault_resource_group_name" {
   type        = string
   description = "name of the azurerm_network_security_group"
 }
-
-variable "license_type" {
-  type        = string
-  description = "name of the azurerm_network_security_group"
-}
-
