@@ -23,7 +23,7 @@ resource "azurerm_windows_virtual_machine" "example" {
     publisher = var.publisher #MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:20348.1006.220908
     offer     = var.offer  #MicrosoftWindowsServer:WindowsServer:2019-datacenter-core-g2:17763.2686.220303
     sku       = var.sku #MicrosoftWindowsServer:WindowsServer:2016-datacenter-gensecond:14393.5006.220305
-    version   = var.version
+    version   = var.storage_image_version
   }
    depends_on = [
     azurerm_network_interface.network_interface
