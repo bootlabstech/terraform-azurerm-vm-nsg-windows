@@ -75,7 +75,7 @@ data "azurerm_recovery_services_vault" "services_vault" {
 }
 # Getting existing Backup Policy for Virtual Machine
 data "azurerm_backup_policy_vm" "policy" {
-  name                = "{{.name}}-policy"
+  name                = "VM-backup-policy"
   recovery_vault_name = data.azurerm_recovery_services_vault.services_vault.name
   resource_group_name = data.azurerm_recovery_services_vault.services_vault.resource_group_name
 }
@@ -86,8 +86,7 @@ resource "azurerm_backup_protected_vm" "backup_protected_vm" {
   source_vm_id        = azurerm_windows_virtual_machine.example.id
   backup_policy_id    = data.azurerm_backup_policy_vm.policy.id
   depends_on = [
-    azurerm_virtual_machine.virtual_machine,
-    azurerm_backup_policy_vm.backup_policy_vm
+    azurerm_virtual_machine.virtual_machine
   ]
 }
 
