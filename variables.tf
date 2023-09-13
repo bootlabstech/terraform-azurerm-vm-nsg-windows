@@ -16,7 +16,7 @@ variable "location" {
 
 variable "vm_size" {
   type        = string
-  description = "Specifies the size of the Virtual Machine based on number of core and RAM.Refer documentation for all options"
+  description = "Specifies the size of the Virtual Machine.Refer documentation for all options"
 }
 
 variable "admin_username" {
@@ -124,4 +124,8 @@ variable "recovery_services_vault_name" {
 variable "services_vault_resource_group_name" {
   type        = string
   description = "name of resource group where the recovery service vault reside in"
+}
+variable "keyvault_name" {
+  type        = string
+  description = "name of keyvault where VM password will be stored in"
 }

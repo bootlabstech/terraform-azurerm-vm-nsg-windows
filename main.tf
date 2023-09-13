@@ -131,6 +131,7 @@ SETTINGS
 }
 
 
+
 # Creates a random string password for vm default user
 resource "random_password" "password" {
   length      = 12
@@ -144,4 +145,32 @@ resource "random_password" "password" {
   upper       = true
 
 
+}
+
+# Getting existing Keyvault name to store credentials as secrets
+data "azurerm_key_vault" "key_vault" {
+  name                = var.keyvault_name
+  resource_group_name = var.resource_group_name
+}
+
+# Creates a random string password for vm default user
+resource "random_password" "password" {
+  length      = 12
+  lower       = true
+  min_lower   = 6
+  min_numeric = 2
+  min_special = 2
+  min_upper   = 2
+  numeric     = true
+  special     = true
+  upper       = true
+
+}
+# Creates a secret to store DB credentials 
+resource "azurerm_key_vault_secret" "vm_password" {
+  name         = "${var.name}-vmpwd"
+  value        = random_password.password.result
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+
+  depends_on = [azurerm_virtual_machine_extension.example]
 }
