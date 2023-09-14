@@ -22,7 +22,7 @@ variable "vm_size" {
 variable "admin_username" {
   type        = string
   description = "Specifies the name of the local administrator account."
-  default     = "user01"
+
 }
 
 variable "license_type" {
@@ -66,6 +66,7 @@ variable "sku" {
 variable "storage_image_version" {
   type        = string
   description = "Specifies the Operating System version on the OS Disk. View documentation for all options"
+  default = "latest"
 
 }
 
