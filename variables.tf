@@ -14,61 +14,61 @@ variable "location" {
   description = "Location of the resource group. Must be one of following, Central India or South India"
 }
 
-variable "vm_size" {
-  type        = string
-  description = "Specifies the size of the Virtual Machine.Refer documentation for all options"
-}
+# variable "vm_size" {
+#   type        = string
+#   description = "Specifies the size of the Virtual Machine.Refer documentation for all options"
+# }
 
-variable "admin_username" {
-  type        = string
-  description = "Specifies the name of the local administrator account."
+# variable "admin_username" {
+#   type        = string
+#   description = "Specifies the name of the local administrator account."
 
-}
+# }
 
-variable "license_type" {
-  type        = string
-  description = "The License type for Windows VM . Must be one of the values [None, Windows_Client, Windows_Server]"
+# variable "license_type" {
+#   type        = string
+#   description = "The License type for Windows VM . Must be one of the values [None, Windows_Client, Windows_Server]"
 
-}
+# }
 
-# os_disk
-variable "storage_account_type" {
-  type        = string
-  description = "The Type of Storage Account which should back this the Internal OS Disk. Possible values are Standard_LRS, StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS and Premium_ZRS"
-  default     = "Standard_LRS"
-}
+# # os_disk
+# variable "storage_account_type" {
+#   type        = string
+#   description = "The Type of Storage Account which should back this the Internal OS Disk. Possible values are Standard_LRS, StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS and Premium_ZRS"
+#   default     = "Standard_LRS"
+# }
 
-variable "disk_size_gb" {
-  type        = string
-  description = "The Size of the Internal OS Disk in GB, if you wish to vary from the size used in the image this Virtual Machine is sourced from."
+# variable "disk_size_gb" {
+#   type        = string
+#   description = "The Size of the Internal OS Disk in GB, if you wish to vary from the size used in the image this Virtual Machine is sourced from."
 
-}
+# }
 
-# source_image_reference
-variable "publisher" {
-  type        = string
-  description = "Specifies the Publisher of the Marketplace Image this Virtual Machine should be created from.View documentation for all options"
-  default     = "MicrosoftWindowsServer"
-}
+# # source_image_reference
+# variable "publisher" {
+#   type        = string
+#   description = "Specifies the Publisher of the Marketplace Image this Virtual Machine should be created from.View documentation for all options"
+#   default     = "MicrosoftWindowsServer"
+# }
 
-variable "offer" {
-  type        = string
-  description = " Specifies the offer of the image used to create the virtual machines.View documentation for all options "
-  default     = "WindowsServer"
-}
+# variable "offer" {
+#   type        = string
+#   description = " Specifies the offer of the image used to create the virtual machines.View documentation for all options "
+#   default     = "WindowsServer"
+# }
 
-variable "sku" {
-  type        = string
-  description = "Specifies the SKU of the image used to create the virtual machines.View documentation for all options"
+# variable "sku" {
+#   type        = string
+#   description = "Specifies the SKU of the image used to create the virtual machines.View documentation for all options"
 
-}
+# }
 
-variable "storage_image_version" {
-  type        = string
-  description = "Specifies the Operating System version on the OS Disk. View documentation for all options"
-  default = "latest"
+# variable "storage_image_version" {
+#   type        = string
+#   description = "Specifies the Operating System version on the OS Disk. View documentation for all options"
+#   default = "latest"
 
-}
+# }
 
 
 # azurerm_network_interface
@@ -89,44 +89,44 @@ variable "private_ip_address_allocation" {
   default     = "Dynamic"
 }
 
-# azurerm_network_security_rule
-variable "nsg_rules" {
-  type = map(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_address_prefix      = string
-    source_port_range          = string
-    destination_address_prefix = string
-    destination_port_range     = string
-  }))
-  default = {
-    "https" = {
-      access                     = "Allow"
-      destination_address_prefix = "*"
-      destination_port_range     = "443"
-      direction                  = "Inbound"
-      name                       = "allow-https"
-      priority                   = 100
-      protocol                   = "Tcp"
-      source_address_prefix      = "*"
-      source_port_range          = "*"
-    }
-  }
-}
+# # azurerm_network_security_rule
+# variable "nsg_rules" {
+#   type = map(object({
+#     name                       = string
+#     priority                   = number
+#     direction                  = string
+#     access                     = string
+#     protocol                   = string
+#     source_address_prefix      = string
+#     source_port_range          = string
+#     destination_address_prefix = string
+#     destination_port_range     = string
+#   }))
+#   default = {
+#     "https" = {
+#       access                     = "Allow"
+#       destination_address_prefix = "*"
+#       destination_port_range     = "443"
+#       direction                  = "Inbound"
+#       name                       = "allow-https"
+#       priority                   = 100
+#       protocol                   = "Tcp"
+#       source_address_prefix      = "*"
+#       source_port_range          = "*"
+#     }
+#   }
+# }
 
-# azurerm_recovery_services_vault
-variable "recovery_services_vault_name" {
-  type        = string
-  description = "name of the recover service vault"
-}
-variable "services_vault_resource_group_name" {
-  type        = string
-  description = "name of resource group where the recovery service vault reside in"
-}
-variable "keyvault_name" {
-  type        = string
-  description = "name of keyvault where VM password will be stored in"
-}
+# # azurerm_recovery_services_vault
+# variable "recovery_services_vault_name" {
+#   type        = string
+#   description = "name of the recover service vault"
+# }
+# variable "services_vault_resource_group_name" {
+#   type        = string
+#   description = "name of resource group where the recovery service vault reside in"
+# }
+# variable "keyvault_name" {
+#   type        = string
+#   description = "name of keyvault where VM password will be stored in"
+# }
