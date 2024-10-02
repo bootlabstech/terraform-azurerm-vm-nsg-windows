@@ -6,7 +6,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   size                  = var.vm_size
   admin_username        = var.admin_username
   admin_password        = random_password.password.result
-  network_interface_ids = [var.azurerm_network_interface_id]
+  network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type
 
   identity {
@@ -30,25 +30,28 @@ resource "azurerm_windows_virtual_machine" "example" {
       tags,
     ]
   }
+  depends_on = [
+    azurerm_network_interface.network_interface
+  ]
 }
 
 
-# # Creates Network Interface Card with private IP for Virtual Machine
-# resource "azurerm_network_interface" "network_interface" {
-#   name                = "${var.name}-nic"
-#   location            = var.location
-#   resource_group_name = var.resource_group_name
-#   ip_configuration {
-#     name                          = var.ip_name
-#     subnet_id                     = var.subnet_id
-#     private_ip_address_allocation = var.private_ip_address_allocation
-#   }
-#   lifecycle {
-#     ignore_changes = [
-#       tags,
-#     ]
-#   }
-# }
+# Creates Network Interface Card with private IP for Virtual Machine
+resource "azurerm_network_interface" "network_interface" {
+  name                = "${var.name}-nic"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  ip_configuration {
+    name                          = var.ip_name
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = var.private_ip_address_allocation
+  }
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+}
 
 
 # Creates Network Security Group NSG for Virtual Machine
@@ -83,7 +86,7 @@ resource "azurerm_network_security_rule" "nsg_rules" {
 
 # Creates association (i.e) adds NSG to the NIC
 resource "azurerm_network_interface_security_group_association" "security_group_association" {
-  network_interface_id      = var.azurerm_network_interface_id
+  network_interface_id      = azurerm_network_interface.network_interface.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -153,5 +156,5 @@ resource "azurerm_key_vault_secret" "vm_password" {
   value        = random_password.password.result
   key_vault_id = data.azurerm_key_vault.key_vault.id
 
-  depends_on = [ azurerm_windows_virtual_machine.example ]
+  depends_on = [azurerm_virtual_machine_extension.example]
 }
