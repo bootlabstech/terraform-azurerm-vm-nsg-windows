@@ -5,10 +5,11 @@ resource "azurerm_windows_virtual_machine" "example" {
   location              = var.location
   size                  = var.vm_size
   admin_username        = var.admin_username
-  admin_password        = random_password.password.result
+  admin_password        = "Mahindra@123"
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type
-
+  source_image_id = var.image_id
+  secure_boot_enabled = true
   identity {
     type = "SystemAssigned"
   }
@@ -19,12 +20,12 @@ resource "azurerm_windows_virtual_machine" "example" {
     disk_size_gb         = var.disk_size_gb
   }
 
-  source_image_reference {
-    publisher = var.publisher
-    offer     = var.offer
-    sku       = var.sku
-    version   = var.storage_image_version
-  }
+  # source_image_reference {
+  #   publisher = var.publisher
+  #   offer     = var.offer
+  #   sku       = var.sku
+  #   version   = var.storage_image_version
+  # }
   lifecycle {
     ignore_changes = [
       tags,
@@ -33,6 +34,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   depends_on = [
     azurerm_network_interface.network_interface
   ]
+
 }
 
 
@@ -114,28 +116,28 @@ resource "azurerm_backup_protected_vm" "backup_protected_vm" {
 }
 
 
-# # Extention for startup ELK script
-# resource "azurerm_virtual_machine_extension" "example" {
-#   name                 = "${var.name}-elkscript"
-#   virtual_machine_id   = azurerm_windows_virtual_machine.example.id
-#   publisher            = "Microsoft.Compute"
-#   type                 = "CustomScriptExtension"
-#   type_handler_version = "1.10"
+# Extention for startup ELK script
+resource "azurerm_virtual_machine_extension" "example" {
+  name                 = "${var.name}-s1agent"
+  virtual_machine_id   = azurerm_windows_virtual_machine.example.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
 
-#   settings = <<SETTINGS
-#     {
-#       "fileUris": ["https://sharedsaelk.blob.core.windows.net/elk-startup-script/elkscriptwindows.ps1"],
-#       "commandToExecute": "powershell -ExecutionPolicy Bypass -File elkscriptwindows.ps1" 
-#     }
-# SETTINGS
-# }
+  settings = <<SETTINGS
+    {
+      "fileUris": ["https://sharedsaelk.blob.core.windows.net/s1-data/s1-agent.ps1"],
+      "commandToExecute": "powershell -ExecutionPolicy Bypass -File s1-agent.ps1" 
+    }
+SETTINGS
+}
 
 
 # Getting existing Keyvault name to store credentials as secrets
-data "azurerm_key_vault" "key_vault" {
-  name                = var.keyvault_name
-  resource_group_name = var.resource_group_name
-}
+# data "azurerm_key_vault" "key_vault" {
+#   name                = var.keyvault_name
+#   resource_group_name = var.resource_group_name
+# }
 
 # Creates a random string password for vm default user
 resource "random_password" "password" {
@@ -151,10 +153,10 @@ resource "random_password" "password" {
 
 }
 # Creates a secret to store DB credentials 
-resource "azurerm_key_vault_secret" "vm_password" {
-  name         = "${var.name}-vmpwd"
-  value        = random_password.password.result
-  key_vault_id = data.azurerm_key_vault.key_vault.id
+# resource "azurerm_key_vault_secret" "vm_password" {
+#   name         = "${var.name}-vmpwd"
+#   value        = random_password.password.result
+#   key_vault_id = data.azurerm_key_vault.key_vault.id
 
-  depends_on = [ azurerm_windows_virtual_machine.example ]
-}
+#   depends_on = [ azurerm_windows_virtual_machine.example ]
+# }
