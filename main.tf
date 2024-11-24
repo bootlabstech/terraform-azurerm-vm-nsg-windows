@@ -5,7 +5,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   location              = var.location
   size                  = var.vm_size
   admin_username        = var.admin_username
-  admin_password        = "Mahindra@123"
+  admin_password        = random_password.password.result
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type
   source_image_id = var.image_id
