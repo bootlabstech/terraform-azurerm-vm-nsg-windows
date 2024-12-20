@@ -6,10 +6,9 @@ resource "azurerm_windows_virtual_machine" "example" {
   size                  = var.vm_size
   admin_username        = var.admin_username
   admin_password        = random_password.password.result
-  network_interface_ids = [azurerm_network_interface.network_interface.id]
+  network_interface_ids = [var.azurerm_network_interface_id]
   license_type          = var.license_type
-  source_image_id = var.image_id
-  secure_boot_enabled = true
+
   identity {
     type = "SystemAssigned"
   }
@@ -20,33 +19,11 @@ resource "azurerm_windows_virtual_machine" "example" {
     disk_size_gb         = var.disk_size_gb
   }
 
-  # source_image_reference {
-  #   publisher = var.publisher
-  #   offer     = var.offer
-  #   sku       = var.sku
-  #   version   = var.storage_image_version
-  # }
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
-  }
-  depends_on = [
-    azurerm_network_interface.network_interface
-  ]
-
-}
-
-
-# Creates Network Interface Card with private IP for Virtual Machine
-resource "azurerm_network_interface" "network_interface" {
-  name                = "${var.name}-nic"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  ip_configuration {
-    name                          = var.ip_name
-    subnet_id                     = var.subnet_id
-    private_ip_address_allocation = var.private_ip_address_allocation
+  source_image_reference {
+    publisher = var.publisher
+    offer     = var.offer
+    sku       = var.sku
+    version   = var.storage_image_version
   }
   lifecycle {
     ignore_changes = [
@@ -54,6 +31,24 @@ resource "azurerm_network_interface" "network_interface" {
     ]
   }
 }
+
+
+# # Creates Network Interface Card with private IP for Virtual Machine
+# resource "azurerm_network_interface" "network_interface" {
+#   name                = "${var.name}-nic"
+#   location            = var.location
+#   resource_group_name = var.resource_group_name
+#   ip_configuration {
+#     name                          = var.ip_name
+#     subnet_id                     = var.subnet_id
+#     private_ip_address_allocation = var.private_ip_address_allocation
+#   }
+#   lifecycle {
+#     ignore_changes = [
+#       tags,
+#     ]
+#   }
+# }
 
 
 # Creates Network Security Group NSG for Virtual Machine
@@ -88,7 +83,7 @@ resource "azurerm_network_security_rule" "nsg_rules" {
 
 # Creates association (i.e) adds NSG to the NIC
 resource "azurerm_network_interface_security_group_association" "security_group_association" {
-  network_interface_id      = azurerm_network_interface.network_interface.id
+  network_interface_id      = var.azurerm_network_interface_id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -118,7 +113,7 @@ resource "azurerm_backup_protected_vm" "backup_protected_vm" {
 
 # Extention for startup ELK script
 resource "azurerm_virtual_machine_extension" "example" {
-  name                 = "${var.name}-s1agent"
+  name                 = "${var.name}-elkscript"
   virtual_machine_id   = azurerm_windows_virtual_machine.example.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
@@ -126,18 +121,18 @@ resource "azurerm_virtual_machine_extension" "example" {
 
   settings = <<SETTINGS
     {
-      "fileUris": ["https://sharedsaelk.blob.core.windows.net/s1-data/s1-agent.ps1"],
-      "commandToExecute": "powershell -ExecutionPolicy Bypass -File s1-agent.ps1" 
+      "fileUris": ["https://sharedsaelk.blob.core.windows.net/elk-startup-script/elkscriptwindows.ps1"],
+      "commandToExecute": "powershell -ExecutionPolicy Bypass -File elkscriptwindows.ps1" 
     }
 SETTINGS
 }
 
 
 # Getting existing Keyvault name to store credentials as secrets
-# data "azurerm_key_vault" "key_vault" {
-#   name                = var.keyvault_name
-#   resource_group_name = var.resource_group_name
-# }
+data "azurerm_key_vault" "key_vault" {
+  name                = var.keyvault_name
+  resource_group_name = var.resource_group_name
+}
 
 # Creates a random string password for vm default user
 resource "random_password" "password" {
@@ -153,10 +148,10 @@ resource "random_password" "password" {
 
 }
 # Creates a secret to store DB credentials 
-# resource "azurerm_key_vault_secret" "vm_password" {
-#   name         = "${var.name}-vmpwd"
-#   value        = random_password.password.result
-#   key_vault_id = data.azurerm_key_vault.key_vault.id
+resource "azurerm_key_vault_secret" "vm_password" {
+  name         = "${var.name}-vmpwd"
+  value        = random_password.password.result
+  key_vault_id = data.azurerm_key_vault.key_vault.id
 
-#   depends_on = [ azurerm_windows_virtual_machine.example ]
-# }
+  depends_on = [ azurerm_windows_virtual_machine.example ]
+}

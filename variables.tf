@@ -57,10 +57,9 @@ variable "offer" {
   default     = "WindowsServer"
 }
 
-variable "image_id" {
+variable "sku" {
   type        = string
   description = "Specifies the SKU of the image used to create the virtual machines.View documentation for all options"
-  default = "/subscriptions/29c1919d-1602-46ca-b8eb-3bb0433f31fd/resourceGroups/rsg-dev-golden-image-ci-01/providers/Microsoft.Compute/galleries/windowgoldenimage/images/goldenimage/versions/28.10.2024"
 
 }
 
@@ -72,23 +71,23 @@ variable "storage_image_version" {
 }
 
 
-# azurerm_network_interface
-variable "ip_name" {
-  type        = string
-  description = "A name used for this IP Configuration."
-  default     = "internal"
-}
+# # azurerm_network_interface
+# variable "ip_name" {
+#   type        = string
+#   description = "A name used for this IP Configuration."
+#   default     = "internal"
+# }
 
-variable "subnet_id" {
-  type        = string
-  description = "The ID of the Subnet where this Network Interface should be located in. Select subnet according to factors 1.application server (appsubnet) 2. web server (websubnet) 3. database server (dbsubnet)"
-}
+# variable "subnet_id" {
+#   type        = string
+#   description = "The ID of the Subnet where this Network Interface should be located in. Select subnet according to factors 1.application server (appsubnet) 2. web server (websubnet) 3. database server (dbsubnet)"
+# }
 
-variable "private_ip_address_allocation" {
-  type        = string
-  description = "The allocation method used for the Private IP Address. Possible values are Dynamic and Static"
-  default     = "Dynamic"
-}
+# variable "private_ip_address_allocation" {
+#   type        = string
+#   description = "The allocation method used for the Private IP Address. Possible values are Dynamic and Static"
+#   default     = "Dynamic"
+# }
 
 # azurerm_network_security_rule
 variable "nsg_rules" {
@@ -130,4 +129,10 @@ variable "services_vault_resource_group_name" {
 variable "keyvault_name" {
   type        = string
   description = "name of keyvault where VM password will be stored in"
+}
+
+variable "azurerm_network_interface_id" {
+  type        = string
+
+  
 }
