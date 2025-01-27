@@ -79,7 +79,7 @@ resource "azurerm_network_security_rule" "nsg_rules" {
 
 # Creates association (i.e) adds NSG to the NIC
 resource "azurerm_network_interface_security_group_association" "security_group_association" {
-  network_interface_id      = var.azurerm_network_interface_id
+  network_interface_id      = azurerm_network_interface.network_interface.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
