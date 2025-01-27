@@ -6,8 +6,9 @@ resource "azurerm_windows_virtual_machine" "example" {
   size                  = var.vm_size
   admin_username        = var.admin_username
   admin_password        = random_password.password.result
-  network_interface_ids = [var.azurerm_network_interface_id]
+  network_interface_ids = [ azurerm_network_interface.network_interface.id ]
   license_type          = var.license_type
+  source_image_id                 = var.image_id
 
   identity {
     type = "SystemAssigned"
@@ -19,12 +20,7 @@ resource "azurerm_windows_virtual_machine" "example" {
     disk_size_gb         = var.disk_size_gb
   }
 
-  source_image_reference {
-    publisher = var.publisher
-    offer     = var.offer
-    sku       = var.sku
-    version   = var.storage_image_version
-  }
+
   lifecycle {
     ignore_changes = [
       tags,
@@ -33,22 +29,22 @@ resource "azurerm_windows_virtual_machine" "example" {
 }
 
 
-# # Creates Network Interface Card with private IP for Virtual Machine
-# resource "azurerm_network_interface" "network_interface" {
-#   name                = "${var.name}-nic"
-#   location            = var.location
-#   resource_group_name = var.resource_group_name
-#   ip_configuration {
-#     name                          = var.ip_name
-#     subnet_id                     = var.subnet_id
-#     private_ip_address_allocation = var.private_ip_address_allocation
-#   }
-#   lifecycle {
-#     ignore_changes = [
-#       tags,
-#     ]
-#   }
-# }
+# Creates Network Interface Card with private IP for Virtual Machine
+resource "azurerm_network_interface" "network_interface" {
+  name                = "${var.name}-nic"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  ip_configuration {
+    name                          = var.ip_name
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = var.private_ip_address_allocation
+  }
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+}
 
 
 # Creates Network Security Group NSG for Virtual Machine
@@ -113,7 +109,7 @@ resource "azurerm_backup_protected_vm" "backup_protected_vm" {
 
 # Extention for startup ELK script
 resource "azurerm_virtual_machine_extension" "example" {
-  name                 = "${var.name}-elkscript"
+  name                 = "${var.name}-s1agent"
   virtual_machine_id   = azurerm_windows_virtual_machine.example.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
@@ -121,8 +117,8 @@ resource "azurerm_virtual_machine_extension" "example" {
 
   settings = <<SETTINGS
     {
-      "fileUris": ["https://sharedsaelk.blob.core.windows.net/elk-startup-script/elkscriptwindows.ps1"],
-      "commandToExecute": "powershell -ExecutionPolicy Bypass -File elkscriptwindows.ps1" 
+      "fileUris": ["https://sharedsaelk.blob.core.windows.net/s1-data/s1-agent.ps1"],
+      "commandToExecute": "powershell -ExecutionPolicy Bypass -File s1-agent.ps1" 
     }
 SETTINGS
 }
