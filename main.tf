@@ -9,6 +9,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   network_interface_ids = [ azurerm_network_interface.network_interface.id ]
   license_type          = var.license_type
   source_image_id                 = var.image_id
+  secure_boot_enabled = var.secure_boot_enabled
 
   identity {
     type = "SystemAssigned"

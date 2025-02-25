@@ -112,3 +112,8 @@ variable "image_id" {
   type = string
   
 }
+variable "secure_boot_enabled" {
+  type = bool
+  default = true
+  
+}
