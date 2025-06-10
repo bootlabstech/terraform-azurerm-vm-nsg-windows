@@ -7,7 +7,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_username        = var.admin_username
   admin_password        = random_password.password.result
   network_interface_ids = [azurerm_network_interface.network_interface.id]
-  license_type          = var.license_type
+  license_type          = var.license_type 
 
   identity {
     type = "SystemAssigned"
@@ -158,3 +158,4 @@ resource "azurerm_key_vault_secret" "vm_password" {
 
   depends_on = [azurerm_virtual_machine_extension.example]
 }
+
