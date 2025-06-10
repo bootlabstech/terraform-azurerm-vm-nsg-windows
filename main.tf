@@ -8,6 +8,8 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_password        = random_password.password.result
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type 
+  patch_assessment_mode         = var.patch_assessment_mode
+  patch_mode                    = var.patch_mode 
 
   identity {
     type = "SystemAssigned"
