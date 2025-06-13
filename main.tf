@@ -12,7 +12,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   patch_mode                    = var.patch_mode 
   source_image_id                 = var.image_id
   secure_boot_enabled = var.secure_boot_enabled
-  patch_mode = var.patch_mode 
+
 
 
   identity {
