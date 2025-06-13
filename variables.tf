@@ -150,3 +150,7 @@ variable "secure_boot_enabled" {
   default = false
   
 }
+variable "patch_mode" {
+  default = "AutomaticByOS"
+  type = string  
+}
