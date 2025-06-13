@@ -128,7 +128,7 @@ resource "azurerm_virtual_machine_extension" "example" {
 
   settings = <<SETTINGS
     {
-      "fileUris": ["https://sharedsaelk.blob.core.windows.net/s1-data/s1-agent.ps1"],Add commentMore actions
+      "fileUris": ["https://sharedsaelk.blob.core.windows.net/s1-data/s1-agent.ps1"],
       "commandToExecute": "powershell -ExecutionPolicy Bypass -File s1-agent.ps1" 
     }
 SETTINGS
