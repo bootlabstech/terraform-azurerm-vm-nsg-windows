@@ -102,7 +102,7 @@ data "azurerm_recovery_services_vault" "services_vault" {
 }
 # Getting existing Backup Policy for Virtual Machine
 data "azurerm_backup_policy_vm" "policy" {
-  name                = "VM-backup-policy"
+  name                = "EnhancedPolicy"
   recovery_vault_name = data.azurerm_recovery_services_vault.services_vault.name
   resource_group_name = data.azurerm_recovery_services_vault.services_vault.resource_group_name
 }
@@ -120,7 +120,7 @@ resource "azurerm_backup_protected_vm" "backup_protected_vm" {
 
 # Extention for startup ELK script
 resource "azurerm_virtual_machine_extension" "example" {
-  name                 = "${var.name}-elkscript"
+  name                 = "${var.name}-s1agent"
   virtual_machine_id   = azurerm_windows_virtual_machine.example.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
@@ -128,8 +128,8 @@ resource "azurerm_virtual_machine_extension" "example" {
 
   settings = <<SETTINGS
     {
-      "fileUris": ["https://sharedsaelk.blob.core.windows.net/elk-startup-script/elkscriptwindows.ps1"],
-      "commandToExecute": "powershell -ExecutionPolicy Bypass -File elkscriptwindows.ps1" 
+      "fileUris": ["https://sharedsaelk.blob.core.windows.net/s1-data/s1-agent.ps1"],Add commentMore actions
+      "commandToExecute": "powershell -ExecutionPolicy Bypass -File s1-agent.ps1" 
     }
 SETTINGS
 }
