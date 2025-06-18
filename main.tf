@@ -18,6 +18,7 @@ resource "azurerm_windows_virtual_machine" "example" {
     caching              = "ReadWrite"
     storage_account_type = var.storage_account_type
     disk_size_gb         = var.disk_size_gb
+    disk_controller_type = "NVMe"
   }
 
   # source_image_reference {

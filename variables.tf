@@ -60,7 +60,7 @@ variable "offer" {
 variable "image_id" {
   type        = string
   description = "Specifies the SKU of the image used to create the virtual machines.View documentation for all options"
-  default = "/subscriptions/29c1919d-1602-46ca-b8eb-3bb0433f31fd/resourceGroups/rsg-dev-golden-image-ci-01/providers/Microsoft.Compute/galleries/windowgoldenimage/images/goldenimage/versions/28.10.2024"
+  default = "/subscriptions/29c1919d-1602-46ca-b8eb-3bb0433f31fd/resourceGroups/rsg-dev-golden-image-ci-01/providers/Microsoft.Compute/galleries/windowgolden/images/window-image-golden/versions/20.11.2024"
 
 }
 
