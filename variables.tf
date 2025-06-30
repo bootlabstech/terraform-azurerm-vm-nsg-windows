@@ -147,15 +147,6 @@ variable "image_id" {
 }
 variable "secure_boot_enabled" {
   type        = bool
-  default = false
+  default = true
   
-}
-
-variable "patch_assessment_mode" {
-  default = "ImageDefault"
-  type = string  
-}
-variable "patch_mode" {
-  default = "AutomaticByOS"
-  type = string  
 }
