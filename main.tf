@@ -8,8 +8,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_password        = random_password.password.result
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type 
-  patch_assessment_mode         = var.patch_assessment_mode
-  patch_mode                    = var.patch_mode 
+
   source_image_id                 = var.image_id
   secure_boot_enabled = var.secure_boot_enabled
 
@@ -164,4 +163,3 @@ resource "azurerm_key_vault_secret" "vm_password" {
 
   depends_on = [azurerm_virtual_machine_extension.example]
 }
-
