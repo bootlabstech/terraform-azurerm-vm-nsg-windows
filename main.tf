@@ -24,12 +24,7 @@ resource "azurerm_windows_virtual_machine" "example" {
     disk_size_gb         = var.disk_size_gb
   }
 
-  # source_image_reference {
-  #   publisher = var.publisher
-  #   offer     = var.offer
-  #   sku       = var.sku
-  #   version   = var.storage_image_version
-  # }
+
   lifecycle {
     ignore_changes = [
       tags,
