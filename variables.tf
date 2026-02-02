@@ -116,12 +116,30 @@ variable "keyvault_name" {
   type        = string
   description = "name of keyvault where VM password will be stored in"
 }
-variable "image_id" {
-  type        = string
+# variable "image_id" {
+#   type        = string
   
-}
+# }
 variable "secure_boot_enabled" {
   type        = bool
   default = true
+  
+}
+variable "publisher" {
+  type = string
+  default = "MicrosoftWindowsServer"
+
+  
+}
+variable "offer" {
+  type = string
+  default = "WindowsServer"
+  
+  
+}
+variable "sku" {
+  type = string
+
+  
   
 }
