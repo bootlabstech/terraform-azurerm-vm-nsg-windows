@@ -9,10 +9,10 @@ resource "azurerm_windows_virtual_machine" "example" {
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type 
 
-  # source_image_id                 = var.image_id
+  source_image_id                 = var.image_id
   secure_boot_enabled = var.secure_boot_enabled
 
-
+  vtpm_enabled          = var.vtpm_enabled
 
   identity {
     type = "SystemAssigned"
@@ -22,12 +22,6 @@ resource "azurerm_windows_virtual_machine" "example" {
     caching              = "ReadWrite"
     storage_account_type = var.storage_account_type
     disk_size_gb         = var.disk_size_gb
-  }
-  source_image_reference {
-    publisher = var.publisher
-    offer     = var.offer
-    sku       = var.sku
-    version   = "latest"
   }
 
 
@@ -97,7 +91,27 @@ resource "azurerm_network_interface_security_group_association" "security_group_
 }
 
 
-
+# Getting existing recovery_services_vault to add vm as a backup item 
+data "azurerm_recovery_services_vault" "services_vault" {
+  name                = var.recovery_services_vault_name
+  resource_group_name = var.services_vault_resource_group_name
+}
+# Getting existing Backup Policy for Virtual Machine
+data "azurerm_backup_policy_vm" "policy" {
+  name                = "EnhancedPolicy"
+  recovery_vault_name = data.azurerm_recovery_services_vault.services_vault.name
+  resource_group_name = data.azurerm_recovery_services_vault.services_vault.resource_group_name
+}
+# Creates Backup protected Virtual Machine
+resource "azurerm_backup_protected_vm" "backup_protected_vm" {
+  resource_group_name = data.azurerm_recovery_services_vault.services_vault.resource_group_name
+  recovery_vault_name = data.azurerm_recovery_services_vault.services_vault.name
+  source_vm_id        = azurerm_windows_virtual_machine.example.id
+  backup_policy_id    = data.azurerm_backup_policy_vm.policy.id
+  depends_on = [
+    azurerm_windows_virtual_machine.example
+  ]
+}
 
 
 # Extention for startup ELK script

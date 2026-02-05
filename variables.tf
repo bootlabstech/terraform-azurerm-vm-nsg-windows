@@ -41,7 +41,11 @@ variable "patch_mode" {
   type = string
   default = "AutomaticByPlatform"
 }
-
+variable "vtpm_enabled" {
+  description = "Enable Virtual Trusted Platform Module (vTPM)"
+  type        = bool
+ 
+}
 # os_disk
 variable "storage_account_type" {
   type        = string
@@ -111,35 +115,25 @@ variable "nsg_rules" {
   }
 }
 
-
+# azurerm_recovery_services_vault
+variable "recovery_services_vault_name" {
+  type        = string
+  description = "name of the recover service vault"
+}
+variable "services_vault_resource_group_name" {
+  type        = string
+  description = "name of resource group where the recovery service vault reside in"
+}
 variable "keyvault_name" {
   type        = string
   description = "name of keyvault where VM password will be stored in"
 }
-# variable "image_id" {
-#   type        = string
+variable "image_id" {
+  type        = string
   
-# }
+}
 variable "secure_boot_enabled" {
   type        = bool
   default = true
-  
-}
-variable "publisher" {
-  type = string
-  default = "MicrosoftWindowsServer"
-
-  
-}
-variable "offer" {
-  type = string
-  default = "WindowsServer"
-  
-  
-}
-variable "sku" {
-  type = string
-
-  
   
 }
