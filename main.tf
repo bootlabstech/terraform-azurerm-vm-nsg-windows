@@ -35,6 +35,12 @@ resource "azurerm_windows_virtual_machine" "example" {
   ]
 }
 
+resource "azurerm_disk_access" "azurerm_disk_access" {
+  name                = "${var.name}-diskacc"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+}
+
 
 # Creates Network Interface Card with private IP for Virtual Machine
 resource "azurerm_network_interface" "network_interface" {
@@ -158,3 +164,5 @@ resource "azurerm_key_vault_secret" "vm_password" {
 
   depends_on = [azurerm_virtual_machine_extension.example]
 }
+
+

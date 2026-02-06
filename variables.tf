@@ -44,6 +44,7 @@ variable "patch_mode" {
 variable "vtpm_enabled" {
   description = "Enable Virtual Trusted Platform Module (vTPM)"
   type        = bool
+  default = true
  
 }
 # os_disk
@@ -137,3 +138,6 @@ variable "secure_boot_enabled" {
   default = true
   
 }
+
+
+
