@@ -9,7 +9,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type 
 
-  source_image_id                 = var.image_id
+  # source_image_id                 = var.image_id
   secure_boot_enabled = var.secure_boot_enabled
 
   vtpm_enabled          = var.vtpm_enabled
@@ -23,7 +23,12 @@ resource "azurerm_windows_virtual_machine" "example" {
     storage_account_type = var.storage_account_type
     disk_size_gb         = var.disk_size_gb
   }
-
+    source_image_reference {
+    publisher = var.publisher
+    offer     = var.offer
+    sku       = var.sku
+    version   = var.storage_image_version
+  }
 
   lifecycle {
     ignore_changes = [
