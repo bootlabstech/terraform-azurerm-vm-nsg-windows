@@ -123,10 +123,7 @@ variable "keyvault_name" {
   type        = string
   description = "name of keyvault where VM password will be stored in"
 }
-# variable "image_id" {
-#   type        = string
-  
-# }
+
 variable "secure_boot_enabled" {
   type        = bool
   default = true
