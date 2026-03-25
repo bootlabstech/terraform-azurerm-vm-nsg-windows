@@ -62,12 +62,6 @@ variable "disk_size_gb" {
 
 
 
-variable "storage_image_version" {
-  type        = string
-  description = "Specifies the Operating System version on the OS Disk. View documentation for all options"
-  default = "latest"
-
-}
 
 
 # azurerm_network_interface
