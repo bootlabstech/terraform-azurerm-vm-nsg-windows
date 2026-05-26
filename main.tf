@@ -8,7 +8,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_password        = random_password.password.result
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   license_type          = var.license_type 
-
+  vtpm_enabled = true
   source_image_id                 = var.image_id
   secure_boot_enabled = var.secure_boot_enabled
 
