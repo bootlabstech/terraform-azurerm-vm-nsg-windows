@@ -137,3 +137,4 @@ variable "environment" {
   description = "Environment name (dev, uat, prod)"
   type        = string
 }
+
