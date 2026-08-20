@@ -111,12 +111,10 @@ resource "azurerm_backup_protected_vm" "backup_protected_vm" {
   count               = lower(var.environment) == "prod" ? 0 : 1
   resource_group_name = data.azurerm_recovery_services_vault.services_vault[0].resource_group_name
   recovery_vault_name = data.azurerm_recovery_services_vault.services_vault[0].name
-  source_vm_id        = azurerm_linux_virtual_machine.vm.id
+  source_vm_id        = azurerm_windows_virtual_machine.example.id
   backup_policy_id    = data.azurerm_backup_policy_vm.policy[0].id
+  depends_on = [ azurerm_windows_virtual_machine.example ]
 
-  depends_on = [
-    azurerm_linux_virtual_machine.vm
-  ]
 }
 
 
